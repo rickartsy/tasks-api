@@ -19,3 +19,6 @@ Content-Type: application/json
     "title": "test",
     "completed": true
 }
+
+### Delete a task
+DELETE {{baseurl}}/tasks/1
