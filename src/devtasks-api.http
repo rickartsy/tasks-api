@@ -10,3 +10,12 @@ Content-Type: application/json
 {
     "title": "test"
 }
+
+### Update a task
+PUT {{baseurl}}/tasks/1
+Content-Type: application/json
+
+{
+    "title": "test",
+    "completed": true
+}
