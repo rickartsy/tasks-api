@@ -1,0 +1,12 @@
+@baseurl = http://localhost:3000
+
+### GET all tasks
+GET {{baseurl}}/tasks
+
+### Create a new product
+POST {{baseurl}}/tasks
+Content-Type: application/json
+
+{
+    "title": "test"
+}
