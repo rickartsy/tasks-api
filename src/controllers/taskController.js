@@ -8,11 +8,13 @@ export function getTasks(req, res) {
     res.json(tasks);
 }
 
-export function createTask(req, res) {
+export function createTask(req, res, next) {
     const { title } = req.body;
 
     if (!title) {
-        return res.status(400).json({ message: 'Title is required'});
+        const error = new Error('Title is required');
+        error.status = 400;
+        return next(error);
     }
 
     const newTask = {
@@ -26,14 +28,16 @@ export function createTask(req, res) {
     res.status(201).json(newTask);
 }
 
-export function updateTask(req, res) {
+export function updateTask(req, res, next) {
     const id = parseInt(req.params.id);
     const { title, completed } = req.body;
 
     const task = tasks.find(t => t.id === id);
 
     if (!task) {
-        return res.status(404).json({ message: 'Task not found' });
+        const error = new Error('Task not found');
+        error.status = 404;
+        return next(error);
     }
 
     if (title !== undefined) {
@@ -47,12 +51,14 @@ export function updateTask(req, res) {
     res.json(task);
 }
 
-export function deleteTask(req, res) {
+export function deleteTask(req, res, next) {
     const id = parseInt(req.params.id);
     const index = tasks.findIndex(t => t.id === id);
 
     if (index === -1) {
-        return res.status(404).json({ message: 'Task not found' });
+        const error = new Error('Task not found');
+        error.status = 404;
+        return next(error);
     }
 
     tasks.splice(index, 1);
