@@ -45,7 +45,7 @@ export function updateTask(req, res) {
     }
 
     res.json(task);
-};
+}
 
 export function deleteTask(req, res) {
     const id = parseInt(req.params.id);
@@ -58,4 +58,4 @@ export function deleteTask(req, res) {
     tasks.splice(index, 1);
 
     res.status(204).send();
-};
+}
