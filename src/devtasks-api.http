@@ -22,3 +22,6 @@ Content-Type: application/json
 
 ### Delete a task
 DELETE {{baseurl}}/tasks/1
+
+### 404 handler
+GET {{baseurl}}/notfound
