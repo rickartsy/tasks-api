@@ -11,12 +11,6 @@ export function getTasks(req, res) {
 export function createTask(req, res, next) {
     const { title } = req.body;
 
-    if (!title) {
-        const error = new Error('Title is required');
-        error.status = 400;
-        return next(error);
-    }
-
     const newTask = {
         id: tasks.length + 1,
         title,
