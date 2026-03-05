@@ -1,8 +1,8 @@
-import * as FS from '../utils/fileStorage.js';
+import * as Service from '../services/taskService.js';
 
 export async function getTasks(req, res, next) {
     try {
-        const tasks = await FS.readTasks();
+        const tasks = await Service.readTasks();
         res.json(tasks);
     } catch (error) {
         next(error);
@@ -12,15 +12,8 @@ export async function getTasks(req, res, next) {
 export async function createTask(req, res, next) {
     try {
         const { title } = req.body;
-        const tasks = await FS.readTasks();
-        const newTask = {
-            id: tasks.length + 1,
-            title,
-            completed: false
-        };
 
-        tasks.push(newTask);
-        await FS.writeTasks(tasks);
+        const newTask = await Service.createTask(title);
 
         res.status(201).json(newTask);
 
@@ -32,26 +25,11 @@ export async function createTask(req, res, next) {
 export async function updateTask(req, res, next) {
     try {
         const id = parseInt(req.params.id);
-        const { title, completed } = req.body;
+        const update = req.body;
 
-        const tasks = await FS.readTasks();
-        const task = tasks.find(t => t.id === id);
+        const updatedTask = await Service.updateTask(id, update);
 
-        if (!task) {
-            const error = new Error('Task not found');
-            error.status = 404;
-            return next(error);
-        }
-        if (title !== undefined) {
-            task.title = title;
-        }
-        if (completed !== undefined) {
-            task.completed = completed;
-        }
-
-        await FS.writeTasks(tasks);
-
-        res.json(task);
+        res.json(updatedTask);
 
     } catch (error) {
         next(error);
@@ -62,20 +40,10 @@ export async function deleteTask(req, res, next) {
     try {
         const id = parseInt(req.params.id);
         
-        const tasks = await FS.readTasks();
-        const index = tasks.findIndex(t => t.id === id);
-
-        if (index === -1) {
-            const error = new Error('Task not found');
-            error.status = 404;
-            return next(error);
-        }
-
-        tasks.splice(index, 1);
-        await FS.writeTasks(tasks);
+        await Service.deleteTask(id);
 
         res.status(204).send();
-        
+
     } catch (error) {
         next(error);
     }

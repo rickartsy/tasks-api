@@ -18,15 +18,5 @@
     "id": 5,
     "title": "foo",
     "completed": false
-  },
-  {
-    "id": 6,
-    "title": "foo",
-    "completed": false
-  },
-  {
-    "id": 6,
-    "title": "foo",
-    "completed": false
   }
 ]
