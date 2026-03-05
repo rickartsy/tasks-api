@@ -1,7 +1,7 @@
-import { promises as fs } from 'fs';
-import path from 'path';
+import fs from 'fs/promises';
 
-const filePath = path.join(__dirname, '../data/tasks.json');
+// get the current file and directory absolute path
+const filePath = new URL('../data/tasks.json', import.meta.url);
 
 export async function readTasks() {
     const data = await fs.readFile(filePath, 'utf-8');
