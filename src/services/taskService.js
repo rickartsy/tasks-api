@@ -1,7 +1,7 @@
 import * as TaskRepository from '../repositories/taskRepository.js';
 
-export async function getAllTasks() {
-    return await TaskRepository.readTasks();
+export async function getAllTasks(filters) {
+    return await TaskRepository.getAllTasks(filters);
 }
 
 export async function getTaskById(id) {

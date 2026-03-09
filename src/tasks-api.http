@@ -6,6 +6,9 @@ GET {{baseurl}}/tasks
 ### GET task by id
 GET {{baseurl}}/tasks/2
 
+### GET task by query filtering
+GET {{baseurl}}/tasks?completed=true
+
 ### Create a new product
 POST {{baseurl}}/tasks
 Content-Type: application/json
@@ -15,7 +18,7 @@ Content-Type: application/json
 }
 
 ### Update a task
-PUT {{baseurl}}/tasks/1
+PUT {{baseurl}}/tasks/3
 Content-Type: application/json
 
 {

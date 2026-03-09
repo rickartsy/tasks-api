@@ -6,8 +6,8 @@
   },
   {
     "id": 3,
-    "title": "foo",
-    "completed": false
+    "title": "bar",
+    "completed": true
   },
   {
     "id": 4,

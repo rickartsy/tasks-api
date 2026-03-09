@@ -2,7 +2,8 @@ import * as Service from '../services/taskService.js';
 
 export async function getAllTasks(req, res, next) {
     try {
-        const tasks = await Service.getAllTasks();
+        const filters = req.query;
+        const tasks = await Service.getAllTasks(filters);
         res.json(tasks);
     } catch (error) {
         next(error);

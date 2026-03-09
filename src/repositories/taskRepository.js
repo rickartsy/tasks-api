@@ -11,6 +11,18 @@ export async function writeTasks(task) {
     await fs.writeFile(filePath, JSON.stringify(task, null, 2));
 }
 
+export async function getAllTasks(filters = {}) {
+    let tasks = await readTasks();
+
+    if (filters.completed !== undefined) {
+        const completed = filters.completed === 'true';
+
+        tasks = tasks.filter(t => t.completed === completed)
+    }
+
+    return tasks;
+}
+
 export async function createTask(title) {
     const tasks = await readTasks();
     const newTask = {
