@@ -1,9 +1,20 @@
 import * as Service from '../services/taskService.js';
 
-export async function getTasks(req, res, next) {
+export async function getAllTasks(req, res, next) {
     try {
-        const tasks = await Service.readTasks();
+        const tasks = await Service.getAllTasks();
         res.json(tasks);
+    } catch (error) {
+        next(error);
+    }
+}
+
+export async function getTaskById(req, res, next) {
+    try {
+        const id = parseInt(req.params.id);
+        const task = await Service.getTaskById(id);
+
+        res.json(task);
     } catch (error) {
         next(error);
     }

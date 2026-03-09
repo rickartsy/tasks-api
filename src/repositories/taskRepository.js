@@ -25,6 +25,19 @@ export async function createTask(title) {
     return newTask;
 }
 
+export async function getTaskById(id) {
+    const tasks = await readTasks();
+    const task = tasks.find(t => t.id === id);
+
+    if (!task) {
+        const error = new Error('Task not found');
+        error.status = 404;
+        throw error;
+    }
+
+    return task;
+}
+
 export async function updateTask(id, update) {
     const tasks = await readTasks();
     const task = tasks.find(t => t.id === id);

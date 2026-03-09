@@ -3,6 +3,9 @@
 ### GET all tasks
 GET {{baseurl}}/tasks
 
+### GET task by id
+GET {{baseurl}}/tasks/2
+
 ### Create a new product
 POST {{baseurl}}/tasks
 Content-Type: application/json
