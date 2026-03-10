@@ -1,88 +1,71 @@
-import fs from 'fs/promises';
-
-const filePath = new URL('../data/tasks.json', import.meta.url);
-
-export async function readTasks() {
-    const data = await fs.readFile(filePath, 'utf-8');
-    return JSON.parse(data);
-}
-
-export async function writeTasks(task) {
-    await fs.writeFile(filePath, JSON.stringify(task, null, 2));
-}
+import pool from '../db/pool.js';
 
 export async function getAllTasks(filters = {}) {
-    let tasks = await readTasks();
+    let query = 'SELECT * FROM tasks';
+    const values = [];
 
     if (filters.completed !== undefined) {
-        const completed = filters.completed === 'true';
-
-        tasks = tasks.filter(t => t.completed === completed)
+        values.push(filters.completed === 'true');
+        query += ` WHERE completed = $${values.length}`;
     }
 
-    return tasks;
-}
+    const result = await pool.query(query, values);
 
-export async function createTask(title) {
-    const tasks = await readTasks();
-    const newTask = {
-        id: tasks.length + 1,
-        title,
-        completed: false
-    };
-
-    tasks.push(newTask);
-    await writeTasks(tasks);
-
-    return newTask;
+    return result.rows;
 }
 
 export async function getTaskById(id) {
-    const tasks = await readTasks();
-    const task = tasks.find(t => t.id === id);
+    const result = await pool.query(
+        'SELECT * FROM tasks WHERE id = $1',
+        [id]
+    );
 
-    if (!task) {
+    if (result.rowCount === 0) {
         const error = new Error('Task not found');
         error.status = 404;
         throw error;
     }
 
-    return task;
+    return result.rows[0];
 }
 
-export async function updateTask(id, update) {
-    const tasks = await readTasks();
-    const task = tasks.find(t => t.id === id);
+export async function createTask(title) {
+    const result = await pool.query(
+        `INSERT INTO tasks (title)
+        VALUES ($1)
+        RETURNING *`,
+        [title]
+    );
 
-    if (!task) {
-        const error = new Error('Task not found');
-        error.status = 404;
-        throw error;
-    }
-    if (update.title !== undefined) {
-        task.title = update.title;
-    }
-    if (update.completed !== undefined) {
-        task.completed = update.completed;
-    }
+    return result.rows[0];
+}
 
-    await writeTasks(tasks);
+export async function updateTask(id, updates) {
+    const existing = await getTaskById(id)
+
+    const updated = {
+        ...existing,
+        ...updates
+    };
+
+    const result = await pool.query(
+        `UPDATE tasks
+        SET title = $1,
+            completed = $2
+        WHERE id = $3
+        RETURNING *`,
+        [updated.title, updated.completed, id]
+    );
     
-    return task;
+    return result.rows[0];
 }
 
 export async function deleteTask(id) {
-    const tasks = await readTasks();
-
-    const index = tasks.findIndex(t => t.id === id);
-
-    if (index === -1) {
-        const error = new Error('Task not found');
-        error.status = 404;
-        throw error;
-    }
-
-    tasks.splice(index, 1);
-
-    await writeTasks(tasks);
+    const result = await pool.query(
+        `DELETE FROM tasks
+        WHERE id = $1`,
+        [id]
+    );
+    
+    return result.rowCount > 0;
 }

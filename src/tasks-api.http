@@ -14,7 +14,7 @@ POST {{baseurl}}/tasks
 Content-Type: application/json
 
 {
-    "title": "foo"
+    "title": "bar"
 }
 
 ### Update a task
@@ -22,7 +22,7 @@ PUT {{baseurl}}/tasks/3
 Content-Type: application/json
 
 {
-    "title": "bar",
+    "title": "baz",
     "completed": true
 }
 
